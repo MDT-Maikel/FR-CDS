@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     83977,       1822]
-NotebookOptionsPosition[     80889,       1719]
-NotebookOutlinePosition[     81299,       1735]
-CellTagsIndexPosition[     81256,       1732]
+NotebookDataLength[     93595,       2005]
+NotebookOptionsPosition[     90506,       1902]
+NotebookOutlinePosition[     90916,       1918]
+CellTagsIndexPosition[     90873,       1915]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -46,8 +46,7 @@ by 1 -- this works for DMF-XF6).
 for this).
 * No way to have 4-fermion vertices with Majorana fermions, also in MadGraph \
 (work around for EFT Lagrangian currently is a heavy mediator).
-* Select Model does not handle mediators needed for EFT Lagrangians.
-* Select Model should allow for multiple X masses.\
+* Select Model does not handle mediators needed for EFT Lagrangians.\
 \>", "Text",
  CellChangeTimes->{{3.664890428069512*^9, 3.664890464302844*^9}, 
    3.665141616047606*^9, {3.666010758856793*^9, 3.666010770171732*^9}, {
@@ -62,7 +61,7 @@ for this).
    3.696249281006772*^9, 3.696249329078578*^9}, {3.6962494616403513`*^9, 
    3.6962495356567383`*^9}, {3.696658403963641*^9, 3.696658422520699*^9}, {
    3.696658457083602*^9, 3.696658531449252*^9}, {3.696658702820348*^9, 
-   3.696658721561653*^9}}],
+   3.696658721561653*^9}, {3.697981081538641*^9, 3.697981082112053*^9}}],
 
 Cell[CellGroupData[{
 
@@ -92,11 +91,16 @@ Cell[BoxData[{
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
+   RowBox[{"Default", "[", 
+    RowBox[{"WriteSelectModelFile", ",", "6"}], "]"}], "=", "False"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
    RowBox[{
     RowBox[{"WriteSelectModelFile", "[", 
      RowBox[{
-     "loc_", ",", "pdm_", ",", "px_", ",", "addeft_.", ",", "addmixed_."}], 
-     "]"}], ":=", 
+     "loc_", ",", "pdm_", ",", "px_", ",", "addeft_.", ",", "addmixed_.", ",",
+       "diffmx_."}], "]"}], ":=", 
     RowBox[{"Block", "[", 
      RowBox[{
       RowBox[{"{", 
@@ -205,6 +209,70 @@ classes\\\\s*\\\\**\\\\s*\\\\*\\\\)\\\\s*\>\"", "]"}]}], "]"}], "&"}]}],
              RowBox[{
               RowBox[{"posbasics", "+", "1"}], ",", "posparameters"}], 
              "}"}]}], "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Create", " ", "different", " ", "X", " ", "masses", " ", "if", " ", 
+         "needed"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{"diffmx", ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Block", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"massx", ",", "posmassx"}], "}"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"massx", "=", 
+              RowBox[{
+               RowBox[{"StringCases", "[", 
+                RowBox[{"parameters", ",", 
+                 RowBox[{
+                 "RegularExpression", "[", 
+                  "\"\<MX\\\\s*==\\\\s*\\{[^\\}]*\\},\\\\s+\>\"", "]"}]}], 
+                "]"}], "//", "First"}]}], ";", "\[IndentingNewLine]", 
+             RowBox[{"posmassx", "=", 
+              RowBox[{
+               RowBox[{"StringPosition", "[", 
+                RowBox[{"parameters", ",", "massx"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+             RowBox[{"parameters", "=", 
+              RowBox[{"StringDrop", "[", 
+               RowBox[{"parameters", ",", "posmassx"}], "]"}]}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"posmassx", "=", 
+              RowBox[{"posmassx", "[", 
+               RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+             RowBox[{"For", "[", 
+              RowBox[{
+               RowBox[{"ix", "=", "1"}], ",", 
+               RowBox[{"ix", "\[LessEqual]", 
+                RowBox[{"Length", "[", "particlesx", "]"}]}], ",", 
+               RowBox[{"ix", "++"}], ",", "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"parameters", "=", 
+                 RowBox[{"StringInsert", "[", 
+                  RowBox[{"parameters", ",", 
+                   RowBox[{"StringReplace", "[", 
+                    RowBox[{"massx", ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"\"\<MX\>\"", "\[Rule]", 
+                    RowBox[{"\"\<M\>\"", "<>", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}]}]}], ",", 
+                    RowBox[{"\"\<X mass\>\"", "\[Rule]", 
+                    RowBox[{
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}], "<>", 
+                    "\"\< mass\>\""}]}], ",", 
+                    RowBox[{"\"\<Subscript[M, X]\>\"", "\[Rule]", 
+                    RowBox[{"\"\<Subscript[M, \>\"", "<>", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}], "<>", "\"\<]\>\""}]}]}], 
+                    "}"}]}], "]"}], ",", "posmassx"}], "]"}]}], ";"}]}], 
+              "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", 
+           "]"}], ";"}]}], " ", "\[IndentingNewLine]", "]"}], ";", 
+       "\[IndentingNewLine]", 
        RowBox[{"(*", " ", 
         RowBox[{"TODO", ":", " ", 
          RowBox[{
@@ -380,6 +448,20 @@ classes\\\\s*\\\\**\\\\s*\\\\*\\\\)\\\\s*\>\"", "]"}]}], "]"}], "&"}]}],
                     RowBox[{"[", "ix", "]"}], "]"}], "]"}], ",", "10", ",", 
                     "3"}], "]"}]}]}], "]"}]}]}], "]"}]}], ";"}]}], 
            "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+          RowBox[{"(*", " ", 
+           RowBox[{"Change", " ", "mass", " ", "identifier"}], " ", "*)"}], 
+          "\[IndentingNewLine]", 
+          RowBox[{"If", "[", 
+           RowBox[{"diffmx", ",", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"particlexadd", "=", 
+              RowBox[{"StringReplace", "[", 
+               RowBox[{"particlexadd", ",", 
+                RowBox[{"\"\<MX\>\"", "\[Rule]", 
+                 RowBox[{"\"\<M\>\"", "<>", 
+                  RowBox[{"particlesx", "[", 
+                   RowBox[{"[", "ix", "]"}], "]"}]}]}]}], "]"}]}], ";"}]}], 
+           "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
           RowBox[{"particlex", "=", 
            RowBox[{"particlex", "<>", "particlexadd"}]}], ";"}]}], 
         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
@@ -465,6 +547,20 @@ classes\\\\s*\\\\**\\\\s*\\\\*\\\\)\\\\s*\>\"", "]"}]}], "]"}], "&"}]}],
               RowBox[{"particlesx", "[", 
                RowBox[{"[", "ix", "]"}], "]"}]}]}], "]"}]}], ";", 
           "\[IndentingNewLine]", 
+          RowBox[{"(*", " ", 
+           RowBox[{"Change", " ", "mass", " ", "identifier"}], " ", "*)"}], 
+          "\[IndentingNewLine]", 
+          RowBox[{"If", "[", 
+           RowBox[{"diffmx", ",", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"addlagrx", "=", 
+              RowBox[{"StringReplace", "[", 
+               RowBox[{"addlagrx", ",", 
+                RowBox[{"\"\<MX\>\"", "\[Rule]", 
+                 RowBox[{"\"\<M\>\"", "<>", 
+                  RowBox[{"particlesx", "[", 
+                   RowBox[{"[", "ix", "]"}], "]"}]}]}]}], "]"}]}], ";"}]}], 
+           "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
           RowBox[{"lagrx", "=", 
            RowBox[{"lagrx", "<>", "addlagrx"}]}], ";"}]}], 
         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
@@ -537,63 +633,112 @@ classes\\\\s*\\\\**\\\\s*\\\\*\\\\)\\\\s*\>\"", "]"}]}], "]"}], "&"}]}],
        RowBox[{"If", "[", 
         RowBox[{"addmixed", ",", "\[IndentingNewLine]", 
          RowBox[{
-          RowBox[{"Do", "[", "\[IndentingNewLine]", 
+          RowBox[{"Do", "[", 
            RowBox[{
-            RowBox[{
-             RowBox[{"lagrmixres", "=", 
-              RowBox[{"Select", "[", 
-               RowBox[{"modelfile", ",", 
-                RowBox[{
-                 RowBox[{"StringMatchQ", "[", 
-                  RowBox[{"#", ",", 
-                   RowBox[{"RegularExpression", "[", 
-                    RowBox[{"\"\<\\\\s*L\>\"", "<>", 
+            RowBox[{"Do", "[", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"lagrmixres", "=", 
+                RowBox[{"Select", "[", 
+                 RowBox[{"modelfile", ",", 
+                  RowBox[{
+                   RowBox[{"StringMatchQ", "[", 
+                    RowBox[{"#", ",", 
+                    RowBox[{"RegularExpression", "[", 
+                    RowBox[{"\"\<\\\\s*L\>\"", "<>", "\"\<(\>\"", "<>", 
                     RowBox[{"MultipleXIDConversion", "[", 
                     RowBox[{"particlesx", "[", 
                     RowBox[{"[", "ix", "]"}], "]"}], "]"}], "<>", 
                     RowBox[{"MultipleXIDConversion", "[", 
                     RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "jx", "]"}], "]"}], "]"}], "<>", "\"\<|\>\"",
+                     "<>", 
+                    RowBox[{"MultipleXIDConversion", "[", 
+                    RowBox[{"particlesx", "[", 
                     RowBox[{"[", "jx", "]"}], "]"}], "]"}], "<>", 
-                    "\"\<[a-z]?\\\\s*\\\\:=\\\\s*[[:ascii:]]*\>\""}], "]"}]}],
-                   "]"}], "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-             RowBox[{"lagrmixres", "=", 
-              RowBox[{"StringReplace", "[", 
-               RowBox[{"lagrmixres", ",", 
-                RowBox[{"{", 
-                 RowBox[{
+                    RowBox[{"MultipleXIDConversion", "[", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}], "]"}], "<>", "\"\<)\>\"",
+                     "<>", "\"\<[a-z]?\\\\s*\\\\:=\\\\s*[[:ascii:]]*\>\""}], 
+                    "]"}]}], "]"}], "&"}]}], "]"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"(*", " ", 
+                RowBox[{
+                "First", " ", "replace", " ", "lagrangian", " ", "id", " ", 
+                 "and", " ", "then", " ", "the", " ", "two", " ", "particles",
+                  " ", "inside"}], " ", "*)"}], "\[IndentingNewLine]", 
+               RowBox[{"lagrmixres", "=", 
+                RowBox[{"StringReplace", "[", 
+                 RowBox[{"lagrmixres", ",", 
                   RowBox[{
                    RowBox[{"MultipleXIDConversion", "[", 
                     RowBox[{"particlesx", "[", 
                     RowBox[{"[", "ix", "]"}], "]"}], "]"}], "\[Rule]", 
                    RowBox[{"particlesx", "[", 
-                    RowBox[{"[", "ix", "]"}], "]"}]}], ",", 
+                    RowBox[{"[", "ix", "]"}], "]"}]}], ",", "1"}], "]"}]}], 
+               ";", 
+               RowBox[{"lagrmixres", "=", 
+                RowBox[{"StringReplace", "[", 
+                 RowBox[{"lagrmixres", ",", 
                   RowBox[{
                    RowBox[{"MultipleXIDConversion", "[", 
                     RowBox[{"particlesx", "[", 
                     RowBox[{"[", "jx", "]"}], "]"}], "]"}], "\[Rule]", 
                    RowBox[{"particlesx", "[", 
-                    RowBox[{"[", "jx", "]"}], "]"}]}]}], "}"}]}], "]"}]}], 
-             ";", "\[IndentingNewLine]", 
-             RowBox[{"lagrmix", "=", 
-              RowBox[{"lagrmix", "<>", "lagrmixres"}]}], ";", 
-             "\[IndentingNewLine]", 
-             RowBox[{"If", "[", 
-              RowBox[{
-               RowBox[{"lagrmixres", "\[NotEqual]", 
-                RowBox[{"{", "}"}]}], ",", 
-               RowBox[{"AppendTo", "[", 
-                RowBox[{"lagrmixids", ",", 
-                 RowBox[{"\"\<L\>\"", "<>", 
-                  RowBox[{"particlesx", "[", 
-                   RowBox[{"[", "ix", "]"}], "]"}], "<>", 
-                  RowBox[{"particlesx", "[", 
-                   RowBox[{"[", "jx", "]"}], "]"}]}]}], "]"}]}], "]"}], ";"}],
-             "\[IndentingNewLine]", ",", 
+                    RowBox[{"[", "jx", "]"}], "]"}]}], ",", "1"}], "]"}]}], 
+               ";", "\[IndentingNewLine]", 
+               RowBox[{"lagrmixres", "=", 
+                RowBox[{"StringReplace", "[", 
+                 RowBox[{"lagrmixres", ",", 
+                  RowBox[{
+                   RowBox[{"MultipleXIDConversion", "[", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}], "]"}], "\[Rule]", 
+                   RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}]}], ",", "1"}], "]"}]}], 
+               ";", 
+               RowBox[{"lagrmixres", "=", 
+                RowBox[{"StringReplace", "[", 
+                 RowBox[{"lagrmixres", ",", 
+                  RowBox[{
+                   RowBox[{"MultipleXIDConversion", "[", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "jx", "]"}], "]"}], "]"}], "\[Rule]", 
+                   RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "jx", "]"}], "]"}]}], ",", "1"}], "]"}]}], 
+               ";", "\[IndentingNewLine]", 
+               RowBox[{"lagrmix", "=", 
+                RowBox[{"lagrmix", "<>", "lagrmixres"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"lagrmixres", "\[NotEqual]", 
+                  RowBox[{"{", "}"}]}], ",", 
+                 RowBox[{"AppendTo", "[", 
+                  RowBox[{"lagrmixids", ",", 
+                   RowBox[{
+                    RowBox[{"StringCases", "[", 
+                    RowBox[{"lagrmixres", ",", 
+                    RowBox[{"RegularExpression", "[", 
+                    RowBox[{"\"\<L\>\"", "<>", "\"\<(\>\"", "<>", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}], "<>", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "jx", "]"}], "]"}], "<>", "\"\<|\>\"", "<>", 
+                    
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "jx", "]"}], "]"}], "<>", 
+                    RowBox[{"particlesx", "[", 
+                    RowBox[{"[", "ix", "]"}], "]"}], "<>", "\"\<)\>\""}], 
+                    "]"}]}], "]"}], "//", "First"}]}], "]"}]}], "]"}], ";"}], 
+              "\[IndentingNewLine]", ",", 
+              RowBox[{"{", 
+               RowBox[{"jx", ",", 
+                RowBox[{"ix", "+", "1"}], ",", 
+                RowBox[{"Length", "[", "particlesx", "]"}]}], "}"}]}], "]"}], 
+            ",", 
             RowBox[{"{", 
              RowBox[{"ix", ",", "1", ",", 
-              RowBox[{"Length", "[", "particlesx", "]"}]}], "}"}], ",", 
-            RowBox[{"{", 
-             RowBox[{"jx", ",", "1", ",", 
               RowBox[{"Length", "[", "particlesx", "]"}]}], "}"}]}], 
            "\[IndentingNewLine]", "]"}], ";"}]}], "\[IndentingNewLine]", 
         "]"}], ";", "\[IndentingNewLine]", 
@@ -802,7 +947,31 @@ classes\\\\s*\\\\**\\\\s*\\\\*\\\\)\\\\s*\>\"", "]"}]}], "]"}], "&"}]}],
    3.694324396289054*^9}, {3.694324704438532*^9, 3.694324715936019*^9}, {
    3.694324760633107*^9, 3.6943247610313807`*^9}, {3.694324949766655*^9, 
    3.6943249756503973`*^9}, 3.6943254544078913`*^9, {3.6943254952492523`*^9, 
-   3.6943255202879343`*^9}, {3.6943261500921288`*^9, 3.6943261774421864`*^9}}]
+   3.6943255202879343`*^9}, {3.6943261500921288`*^9, 
+   3.6943261774421864`*^9}, {3.697973887612604*^9, 3.697973890555657*^9}, {
+   3.697973936959145*^9, 3.6979739679362383`*^9}, {3.697974022205037*^9, 
+   3.697974026235744*^9}, {3.6979740675733852`*^9, 3.6979741068003807`*^9}, {
+   3.697974293018578*^9, 3.6979743117529593`*^9}, {3.697974445394125*^9, 
+   3.6979744751414013`*^9}, {3.697974544086813*^9, 3.697974561613924*^9}, {
+   3.697974684338394*^9, 3.697974722772468*^9}, {3.697974925972107*^9, 
+   3.697974926047333*^9}, {3.6979750657714643`*^9, 3.6979751012320766`*^9}, {
+   3.6979751798913*^9, 3.697975227939205*^9}, {3.6979753625695353`*^9, 
+   3.6979753864977627`*^9}, {3.697975518891754*^9, 3.6979755488336077`*^9}, {
+   3.697975645060008*^9, 3.6979757942694597`*^9}, {3.6979758756228*^9, 
+   3.697975886226244*^9}, {3.697976080758728*^9, 3.697976081682308*^9}, {
+   3.697976112893063*^9, 3.6979761200905933`*^9}, {3.697976179031589*^9, 
+   3.6979761804661493`*^9}, {3.697976259576784*^9, 3.6979762922543592`*^9}, {
+   3.697976414188916*^9, 3.69797644476621*^9}, {3.697976626118462*^9, 
+   3.697976714390224*^9}, {3.697976746472527*^9, 3.697977074714663*^9}, {
+   3.697977132028529*^9, 3.697977141120799*^9}, {3.6979772218613787`*^9, 
+   3.697977226935391*^9}, {3.697977257397718*^9, 3.6979772653005667`*^9}, {
+   3.697977297973507*^9, 3.697977300762574*^9}, {3.6979785628635063`*^9, 
+   3.697978588203801*^9}, {3.697980008732958*^9, 3.697980050862679*^9}, {
+   3.697980084323344*^9, 3.697980123340692*^9}, {3.6979801860519857`*^9, 
+   3.69798018743493*^9}, {3.697980218114524*^9, 3.6979802426381187`*^9}, 
+   3.697980273549507*^9, {3.697980414493203*^9, 3.69798045865635*^9}, {
+   3.6979805624111347`*^9, 3.697980573641839*^9}, {3.697980659213291*^9, 
+   3.697980685369536*^9}}]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -835,7 +1004,7 @@ Cell[BoxData[
     "installation"}], " ", "*)"}], "\[IndentingNewLine]", 
   RowBox[{
    RowBox[{
-    RowBox[{"locFR", "=", "\"\<FEYNRULES PATH\>\""}], ";"}], " ", 
+    RowBox[{"locFR", "=", "\"\<<FEYNRULES PATH>\>\""}], ";"}], " ", 
    "\[IndentingNewLine]", 
    RowBox[{"(*", " ", 
     RowBox[{
@@ -845,11 +1014,11 @@ Cell[BoxData[
     RowBox[{"locModelFileDefault", "=", "\"\<dmx.fr\>\""}], ";"}], 
    "\[IndentingNewLine]", 
    RowBox[{
-    RowBox[{"AutoUFOModel", "=", "True"}], ";", "\[NonBreakingSpace]", 
+    RowBox[{"AutoUFOModel", "=", "False"}], ";", "\[NonBreakingSpace]", 
     RowBox[{"(*", " ", 
      RowBox[{"Select", ":", " ", 
       RowBox[{"True", "/", "False"}]}], " ", "*)"}], "\[IndentingNewLine]", 
-    RowBox[{"AutoCalcHEPModel", "=", "False"}], ";", "\[NonBreakingSpace]", 
+    RowBox[{"AutoCalcHEPModel", "=", "True"}], ";", "\[NonBreakingSpace]", 
     RowBox[{"(*", " ", 
      RowBox[{"Select", ":", " ", 
       RowBox[{"True", "/", "False"}]}], " ", "*)"}]}]}]}]], "Input",
@@ -970,7 +1139,8 @@ Cell[BoxData[
    3.693130802218803*^9, 3.693130803609271*^9}, {3.6935574881396513`*^9, 
    3.693557488536088*^9}, {3.6942690767293663`*^9, 3.6942690773543253`*^9}, {
    3.696658761708414*^9, 3.696658787585312*^9}, {3.6966588534237423`*^9, 
-   3.696658853841839*^9}, {3.696658977829138*^9, 3.696658988689353*^9}}],
+   3.696658853841839*^9}, {3.697961172885314*^9, 3.697961176534672*^9}, {
+   3.697981924248601*^9, 3.697981931640423*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -984,11 +1154,12 @@ Cell[BoxData[
      "added", " ", "as", " ", "a", " ", "list"}]}], " ", "*)"}], 
   "\[IndentingNewLine]", 
   RowBox[{
-   RowBox[{"SelectModel", "=", "False"}], ";", "\[NonBreakingSpace]", 
-   RowBox[{"(*", " ", 
-    RowBox[{"Select", ":", " ", 
-     RowBox[{"True", "/", "False"}]}], " ", "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"SelectParticleDM", "=", "\"\<DMS\>\""}], ";", 
+   RowBox[{
+    RowBox[{"SelectModel", "=", "True"}], ";", "\[NonBreakingSpace]", 
+    RowBox[{"(*", " ", 
+     RowBox[{"Select", ":", " ", 
+      RowBox[{"True", "/", "False"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"SelectParticleDM", "=", "\"\<DMF\>\""}], ";"}], 
    "\[NonBreakingSpace]", 
    RowBox[{"(*", " ", 
     RowBox[{"Select", ":", " ", 
@@ -998,29 +1169,33 @@ Cell[BoxData[
         RowBox[{
          RowBox[{"DMS", "/", "DMC"}], "/", "DMM"}], "/", "DMF"}], "/", 
        "DMV"}], "/", "DMW"}]}], " ", "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"SelectParticleX", "=", 
-    RowBox[{"{", 
-     RowBox[{"\"\<XC3\>\"", ",", "\"\<XF8\>\""}], "}"}]}], ";", 
-   "\[NonBreakingSpace]", 
-   RowBox[{"(*", " ", 
-    RowBox[{
+   RowBox[{
+    RowBox[{"SelectParticleX", "=", 
+     RowBox[{"{", 
+      RowBox[{"\"\<XF8\>\"", ",", "\"\<XC3\>\""}], "}"}]}], ";", 
+    "\[NonBreakingSpace]", 
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{"Select", ":", " ", 
+       RowBox[{"List", " ", "of", " ", "XIDs"}]}], ",", " ", 
+      RowBox[{"usually", " ", "a", " ", "single", " ", "particle"}], ",", " ", 
+      RowBox[{"for", " ", "example", " ", "XF6", " ", "or", " ", 
+       RowBox[{"{", 
+        RowBox[{"XC3", ",", " ", "N"}], "}"}], " ", "to", " ", "add", " ", 
+       "the", " ", "particle", " ", "N", " ", "times"}]}], " ", "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"AddEFTLagrangian", "=", "False"}], ";", "\[NonBreakingSpace]", 
+    RowBox[{"(*", " ", 
      RowBox[{"Select", ":", " ", 
-      RowBox[{"List", " ", "of", " ", "XIDs"}]}], ",", " ", 
-     RowBox[{"usually", " ", "a", " ", "single", " ", "particle"}], ",", " ", 
-     
-     RowBox[{"for", " ", "example", " ", "XF6", " ", "or", " ", 
-      RowBox[{"{", 
-       RowBox[{"XC3", ",", " ", "N"}], "}"}], " ", "to", " ", "add", " ", 
-      "the", " ", "particle", " ", "N", " ", "times"}]}], " ", "*)"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{"AddEFTLagrangian", "=", "True"}], ";", "\[NonBreakingSpace]", 
-   RowBox[{"(*", " ", 
-    RowBox[{"Select", ":", " ", 
-     RowBox[{"True", "/", "False"}]}], " ", "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"AddMixedLagrangian", "=", "True"}], ";", "\[NonBreakingSpace]", 
-   RowBox[{"(*", " ", 
-    RowBox[{"Select", ":", " ", 
-     RowBox[{"True", "/", "False"}]}], " ", "*)"}]}]}]], "Input",
+      RowBox[{"True", "/", "False"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"AddMixedLagrangian", "=", "True"}], ";", "\[NonBreakingSpace]", 
+    RowBox[{"(*", " ", 
+     RowBox[{"Select", ":", " ", 
+      RowBox[{"True", "/", "False"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"DifferentXMasses", "=", "True"}], ";", "\[NonBreakingSpace]", 
+    RowBox[{"(*", " ", 
+     RowBox[{"Select", ":", " ", 
+      RowBox[{"True", "/", "False"}]}], " ", "*)"}]}]}]}]], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.6696108929114943`*^9, 3.669610981065344*^9}, {
    3.6696142086286087`*^9, 3.669614213083229*^9}, {3.6696174708643007`*^9, 
@@ -1109,7 +1284,13 @@ Cell[BoxData[
    3.694347100404159*^9, 3.6943471009269953`*^9}, {3.694944195418095*^9, 
    3.694944203196505*^9}, {3.6951192565054092`*^9, 3.695119257019925*^9}, {
    3.69571365767395*^9, 3.695713680963325*^9}, {3.696249362767501*^9, 
-   3.6962493918337183`*^9}, {3.696658764159677*^9, 3.696658766212319*^9}}]
+   3.6962493918337183`*^9}, {3.696658764159677*^9, 3.696658766212319*^9}, {
+   3.697961136259392*^9, 3.697961184160577*^9}, 3.697961294694373*^9, {
+   3.697961352998307*^9, 3.697961363260915*^9}, {3.697961410102932*^9, 
+   3.697961410364463*^9}, {3.69796145511839*^9, 3.6979614554486303`*^9}, 
+   3.69797358054533*^9, {3.697974594776494*^9, 3.6979746710786123`*^9}, {
+   3.6979754079283733`*^9, 3.697975421405883*^9}, 3.6979804893383512`*^9, {
+   3.697980807670429*^9, 3.697980809568926*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1165,12 +1346,14 @@ Cell[BoxData[
        RowBox[{"WriteSelectModelFile", "[", 
         RowBox[{
         "locModelFile", ",", "SelectParticleDM", ",", "SelectParticleX", ",", 
-         "AddEFTLagrangian", ",", "AddMixedLagrangian"}], "]"}], ";", 
-       "\[IndentingNewLine]", 
+         "AddEFTLagrangian", ",", "AddMixedLagrangian", ",", 
+         "DifferentXMasses"}], "]"}], ";", "\[IndentingNewLine]", 
        RowBox[{"locModelFile", "=", "\"\<dmx.fr.select\>\""}], ";"}]}], 
      "\[IndentingNewLine]", "]"}], ";"}]}]}]], "Input",
  InitializationCell->True,
- CellChangeTimes->{{3.696249405618307*^9, 3.696249415102461*^9}}],
+ CellChangeTimes->{{3.696249405618307*^9, 3.696249415102461*^9}, {
+  3.697975460990649*^9, 3.697975461335951*^9}, {3.697976157299431*^9, 
+  3.697976160192646*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -1683,7 +1866,7 @@ Cell[BoxData[
    3.667803953780929*^9}, 3.667804014106647*^9, {3.6678041566310787`*^9, 
    3.667804160737952*^9}, {3.669460184287175*^9, 3.6694602196509247`*^9}, {
    3.669617675240971*^9, 3.669617676128932*^9}, 3.696252793781876*^9}]
-}, Closed]]
+}, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -1717,8 +1900,8 @@ Cell[BoxData[
 }, Closed]]
 }, Open  ]]
 },
-WindowSize->{1855, 1176},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{1364, 1148},
+WindowMargins->{{Automatic, 0}, {0, Automatic}},
 FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
 StyleDefinitions->FrontEnd`FileName[{"Report"}, "StandardReport.nb", 
   CharacterEncoding -> "UTF-8"]
@@ -1736,91 +1919,91 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[579, 22, 409, 5, 91, "Title"],
-Cell[991, 29, 2174, 35, 210, "Text"],
+Cell[991, 29, 2169, 34, 210, "Text"],
 Cell[CellGroupData[{
-Cell[3190, 68, 100, 1, 32, "Subsection"],
-Cell[3293, 71, 303, 5, 31, "Text"],
-Cell[3599, 78, 34060, 726, 2730, "Input",
+Cell[3185, 67, 100, 1, 32, "Subsection"],
+Cell[3288, 70, 303, 5, 50, "Text"],
+Cell[3594, 77, 42827, 896, 3778, "Input",
  InitializationCell->True]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[37696, 809, 154, 2, 33, "Subsection"],
-Cell[37853, 813, 385, 9, 65, "Input"],
-Cell[38241, 824, 9879, 148, 178, "Input",
+Cell[46458, 978, 154, 2, 33, "Subsection"],
+Cell[46615, 982, 385, 9, 65, "Input"],
+Cell[47003, 993, 9931, 149, 178, "Input",
  InitializationCell->True],
-Cell[48123, 974, 8517, 137, 158, "Input",
+Cell[56937, 1144, 9195, 148, 204, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[56677, 1116, 150, 2, 67, "Section"],
-Cell[56830, 1120, 2074, 52, 226, "Input",
+Cell[66169, 1297, 150, 2, 67, "Section"],
+Cell[66322, 1301, 2199, 54, 249, "Input",
  InitializationCell->True],
-Cell[58907, 1174, 598, 14, 88, "Input",
+Cell[68524, 1357, 598, 14, 88, "Input",
  InitializationCell->True],
-Cell[59508, 1190, 765, 18, 88, "Input",
+Cell[69125, 1373, 765, 18, 88, "Input",
  InitializationCell->True],
-Cell[60276, 1210, 2069, 37, 88, "Input",
+Cell[69893, 1393, 2069, 37, 88, "Input",
  InitializationCell->True],
-Cell[62348, 1249, 176, 4, 43, "Input"]
+Cell[71965, 1432, 176, 4, 43, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[62561, 1258, 106, 1, 53, "Section"],
+Cell[72178, 1441, 106, 1, 53, "Section"],
 Cell[CellGroupData[{
-Cell[62692, 1263, 102, 1, 33, "Subsection"],
-Cell[62797, 1266, 95, 1, 41, "Input"],
-Cell[62895, 1269, 94, 1, 41, "Input"],
-Cell[62992, 1272, 243, 3, 41, "Input"],
-Cell[63238, 1277, 315, 5, 41, "Input"]
+Cell[72309, 1446, 102, 1, 33, "Subsection"],
+Cell[72414, 1449, 95, 1, 41, "Input"],
+Cell[72512, 1452, 94, 1, 41, "Input"],
+Cell[72609, 1455, 243, 3, 41, "Input"],
+Cell[72855, 1460, 315, 5, 41, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[63590, 1287, 240, 3, 32, "Subsection"],
-Cell[63833, 1292, 946, 26, 156, "Input"],
-Cell[64782, 1320, 1244, 31, 156, "Input"]
+Cell[73207, 1470, 240, 3, 32, "Subsection"],
+Cell[73450, 1475, 946, 26, 156, "Input"],
+Cell[74399, 1503, 1244, 31, 156, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[66063, 1356, 100, 1, 33, "Subsection"],
-Cell[66166, 1359, 1022, 23, 134, "Input"],
-Cell[67191, 1384, 402, 8, 41, "Input"],
-Cell[67596, 1394, 527, 11, 65, "Input"]
+Cell[75680, 1539, 100, 1, 33, "Subsection"],
+Cell[75783, 1542, 1022, 23, 134, "Input"],
+Cell[76808, 1567, 402, 8, 41, "Input"],
+Cell[77213, 1577, 527, 11, 65, "Input"]
 }, Closed]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[68172, 1411, 169, 2, 53, "Section"],
+Cell[77789, 1594, 169, 2, 53, "Section"],
 Cell[CellGroupData[{
-Cell[68366, 1417, 99, 1, 33, "Subsection"],
-Cell[68468, 1420, 447, 7, 41, "Input"],
-Cell[68918, 1429, 253, 4, 41, "Input"],
-Cell[69174, 1435, 395, 6, 41, "Input"],
-Cell[69572, 1443, 382, 6, 41, "Input"],
-Cell[69957, 1451, 413, 6, 41, "Input"],
-Cell[70373, 1459, 371, 6, 41, "Input"],
-Cell[70747, 1467, 347, 6, 41, "Input"],
-Cell[71097, 1475, 2120, 53, 179, "Input"]
+Cell[77983, 1600, 99, 1, 33, "Subsection"],
+Cell[78085, 1603, 447, 7, 41, "Input"],
+Cell[78535, 1612, 253, 4, 41, "Input"],
+Cell[78791, 1618, 395, 6, 41, "Input"],
+Cell[79189, 1626, 382, 6, 41, "Input"],
+Cell[79574, 1634, 413, 6, 41, "Input"],
+Cell[79990, 1642, 371, 6, 41, "Input"],
+Cell[80364, 1650, 347, 6, 41, "Input"],
+Cell[80714, 1658, 2120, 53, 201, "Input"]
 }, Closed]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[73266, 1534, 97, 1, 53, "Section"],
+Cell[82883, 1717, 97, 1, 53, "Section"],
 Cell[CellGroupData[{
-Cell[73388, 1539, 99, 1, 32, "Subsection"],
-Cell[73490, 1542, 1039, 24, 88, "Input"],
+Cell[83005, 1722, 99, 1, 32, "Subsection"],
+Cell[83107, 1725, 1039, 24, 88, "Input"],
 Cell[CellGroupData[{
-Cell[74554, 1570, 119, 1, 31, "Subsubsection"],
-Cell[74676, 1573, 1757, 34, 134, "Input",
+Cell[84171, 1753, 119, 1, 31, "Subsubsection"],
+Cell[84293, 1756, 1757, 34, 134, "Input",
  InitializationCell->True]
 }, Closed]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[76482, 1613, 101, 1, 32, "Subsection"],
-Cell[76586, 1616, 1091, 24, 88, "Input"],
+Cell[86099, 1796, 101, 1, 32, "Subsection"],
+Cell[86203, 1799, 1091, 24, 88, "Input"],
 Cell[CellGroupData[{
-Cell[77702, 1644, 176, 2, 31, "Subsubsection"],
-Cell[77881, 1648, 1931, 36, 134, "Input",
+Cell[87319, 1827, 176, 2, 31, "Subsubsection"],
+Cell[87498, 1831, 1931, 36, 134, "Input",
  InitializationCell->True]
-}, Closed]]
+}, Open  ]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[79861, 1690, 96, 1, 33, "Subsection"],
-Cell[79960, 1693, 889, 21, 88, "Input"]
+Cell[89478, 1873, 96, 1, 33, "Subsection"],
+Cell[89577, 1876, 889, 21, 88, "Input"]
 }, Closed]]
 }, Closed]]
 }, Open  ]]
